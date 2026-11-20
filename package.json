@@ -1,0 +1,27 @@
+{
+  "name": "fesm",
+  "version": "1.0.0",
+  "description": "File Encrypt and Secure Manager",
+  "bin": {
+    "fesm": "./bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canuxs/fesm.git"
+  },
+  "homepage": "https://github.com/canuxs/fesm#readme",
+  "bugs": {
+    "url": "https://github.com/canuxs/fesm/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "encrypt",
+    "security",
+    "file-manager"
+  ],
+  "author": "canuxs",
+  "license": "MIT"
+}
