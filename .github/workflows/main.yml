@@ -1,0 +1,19 @@
+name: Main to Master Sync
+
+on:
+  workflow_dispatch: # Bu satır Actions sekmesine "Run workflow" (Tek Tuş) butonu ekler
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Master dalına yazma izni verir
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Tüm commit geçmişini alır
+
+      - name: Push main to master
+        run: |
+          git push origin HEAD:refs/heads/master --force
