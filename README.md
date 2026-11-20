@@ -14,7 +14,7 @@ A lightweight, zero-dependency CLI tool for symmetric file encryption and decryp
 Install globally via npm:
 
 ```bash
-npm install -g fesm
+npm install -g bos-fesm
 ```
 
 ## Usage
@@ -23,12 +23,12 @@ npm install -g fesm
 Before encrypting files, generate a security profile containing your password hash and a cryptographically secure random key.
 
 ```bash
-fesm create <path> password <password> [length <number>]
+bos-fesm create <path> password <password> [length <number>]
 ```
 
 **Example:**
 ```bash
-fesm create myprofile.semp password mySecretPassword123 length 512
+bos-fesm create myprofile.semp password mySecretPassword123 length 512
 ```
 *(Note: If `length` is omitted, it defaults to 256 characters).*
 
@@ -36,31 +36,31 @@ fesm create myprofile.semp password mySecretPassword123 length 512
 Encrypt any file using your `.semp` profile and password.
 
 ```bash
-fesm enc <input> by <profile.semp> to <output> password <password>
+bos-fesm enc <input> by <profile.semp> to <output> password <password>
 ```
 
 **Example:**
 ```bash
-fesm enc secret.txt by myprofile.semp to secret.enc password mySecretPassword123
+bos-fesm enc secret.txt by myprofile.semp to secret.enc password mySecretPassword123
 ```
 
 ### 3. Decrypt a File
 Restore an encrypted file back to its original state. You must provide the exact `.semp` file used during encryption.
 
 ```bash
-fesm unenc <input> by <profile.semp> to <output> password <password>
+bos-fesm unenc <input> by <profile.semp> to <output> password <password>
 ```
 
 **Example:**
 ```bash
-fesm unenc secret.enc by myprofile.semp to restored.txt password mySecretPassword123
+bos-fesm unenc secret.enc by myprofile.semp to restored.txt password mySecretPassword123
 ```
 
 ### 4. Help
 View all available commands and syntax directly in your terminal:
 
 ```bash
-fesm help
+bos-fesm help
 ```
 
 ## Security Architecture
