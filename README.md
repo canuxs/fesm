@@ -1,4 +1,4 @@
-# FESM (File Encrypt and Secure Manager)a
+# FESM (File Encrypt and Secure Manager)
 
 A lightweight, zero-dependency CLI tool for symmetric file encryption and decryption using custom security profile files (`.semp`) and password combinations.
 
