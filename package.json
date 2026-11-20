@@ -1,9 +1,9 @@
 {
-  "name": "fesm",
+  "name": "bos-fesm",
   "version": "1.0.0",
-  "description": "File Encrypt and Secure Manager",
+  "description": "Basic and Open Source File Encrypt and Secure Manager (FESM)",
   "bin": {
-    "fesm": "./bin/cli.js"
+    "bos-fesm": "./bin/cli.js"
   },
   "repository": {
     "type": "git",
@@ -17,10 +17,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "bos",
     "cli",
     "encrypt",
     "security",
-    "file-manager"
+    "file-manager",
+    "open-source"
   ],
   "author": "canuxs",
   "license": "MIT"
