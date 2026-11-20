@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki - FESM</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .wiki-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .wiki-loading {
+            text-align: center;
+            color: #0e6f7c;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+        .wiki-content h1, .wiki-content h2, .wiki-content h3 {
+            color: #0e6f7c;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        .wiki-content pre {
+            background-color: #1e242b;
+            color: #36cfd4;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+        .wiki-content code {
+            font-family: Consolas, Monaco, monospace;
+        }
+        .wiki-content p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body class="doc-page">
+
+    <div class="wiki-container">
+        <div id="loading" class="wiki-loading">Loading wiki content...</div>
+        <div id="wikiContent" class="wiki-content"></div>
+    </div>
+
+    <script>
+        const repoOwner = "canuxs";
+        const repoName = "fesm";
+
+        async function fetchWiki() {
+            const urls = [
+                `https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/README.md`,
+                `https://raw.githubusercontent.com/${repoOwner}/${repoName}/master/README.md`
+            ];
+
+            let markdownText = null;
+            for (let url of urls) {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        markdownText = await response.text();
+                        break;
+                    }
+                } catch (e) {}
+            }
+
+            const loadingEl = document.getElementById('loading');
+            const contentEl = document.getElementById('wikiContent');
+
+            loadingEl.style.display = 'none';
+
+            if (markdownText) {
+                contentEl.innerHTML = marked.parse(markdownText);
+            } else {
+                contentEl.innerHTML = "<p style='text-align:center; color:#586069;'>README.md content could not be found for this repository.</p>";
+            }
+        }
+
+        fetchWiki();
+    </script>
+
+</body>
+</html>

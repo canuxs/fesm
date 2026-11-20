@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issues - FESM</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .gh-container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .new-issue-box {
+            background-color: #ffffff;
+            border: 1px solid #dce1e8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .new-issue-box h3 {
+            color: #0e6f7c;
+            font-size: 18px;
+        }
+        .gh-input, .gh-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #dce1e8;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+        .gh-input:focus, .gh-textarea:focus {
+            border-color: #0e6f7c;
+        }
+        .gh-textarea {
+            resize: vertical;
+            height: 90px;
+        }
+        .gh-btn {
+            background-color: #0e6f7c;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+        .gh-btn:hover {
+            background-color: #094c56;
+        }
+        .gh-loading {
+            text-align: center;
+            color: #0e6f7c;
+            font-size: 18px;
+            margin-top: 30px;
+        }
+        .gh-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .gh-item {
+            background-color: #ffffff;
+            border: 1px solid #dce1e8;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        .gh-item:hover {
+            border-color: #0e6f7c;
+        }
+        .gh-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0e6f7c;
+            margin-bottom: 4px;
+        }
+        .gh-info {
+            font-size: 13px;
+            color: #586069;
+        }
+        .gh-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="doc-page">
+
+    <div class="gh-container">
+        <h1>Issues</h1>
+
+        <div class="new-issue-box">
+            <h3>Create a New Issue</h3>
+            <input type="text" id="issueTitle" class="gh-input" placeholder="Issue Title">
+            <textarea id="issueBody" class="gh-textarea" placeholder="Describe the problem or suggestion..."></textarea>
+            <button class="gh-btn" onclick="createIssue()">Submit on GitHub</button>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: #333;">Open Issues</h3>
+        <div id="loading" class="gh-loading">Loading open issues...</div>
+        <div id="ghList" class="gh-list"></div>
+    </div>
+
+    <script>
+        const repoOwner = "canuxs";
+        const repoName = "fesm";
+
+        function createIssue() {
+            const title = document.getElementById('issueTitle').value.trim();
+            const body = document.getElementById('issueBody').value.trim();
+
+            if (!title) {
+                alert("Please enter a title.");
+                return;
+            }
+
+            const githubUrl = `https://github.com/${repoOwner}/${repoName}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+            window.open(githubUrl, '_blank');
+        }
+
+        async function fetchIssues() {
+            const url = `https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=open`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error();
+                
+                const issues = await response.json();
+                const listEl = document.getElementById('ghList');
+                document.getElementById('loading').style.display = 'none';
+
+                const pureIssues = issues.filter(item => !item.pull_request);
+
+                if (pureIssues.length === 0) {
+                    listEl.innerHTML = "<p style='text-align:center; color:#586069;'>There are currently no open issues.</p>";
+                    return;
+                }
+
+                pureIssues.forEach(issue => {
+                    const date = new Date(issue.created_at).toLocaleDateString('en-US');
+                    const item = document.createElement('a');
+                    item.href = issue.html_url;
+                    item.target = "_blank";
+                    item.rel = "noopener noreferrer";
+                    item.className = "gh-item";
+                    
+                    item.innerHTML = `
+                        <div>
+                            <div class="gh-title">#${issue.number} - ${issue.title}</div>
+                            <div class="gh-info">Opened by: ${issue.user.login} | Date: ${date}</div>
+                        </div>
+                        <span class="gh-badge">Open</span>
+                    `;
+                    listEl.appendChild(item);
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = "An error occurred while loading issues.";
+            }
+        }
+
+        fetchIssues();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="wizard-page">
+
+    <div class="wizard-box">
+        <div class="step-indicator" id="stepIndicator">Step 1 of 4</div>
+
+        <div class="step-content active" data-step="1">
+            <p>Hello there! First install FESM with this batch command:</p>
+            <div class="code-block">
+                <span id="cmd1">npm install -g fesm</span>
+                <button class="copy-btn" onclick="copyText('cmd1', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="step-content" data-step="2">
+            <p>If you don't have NPM, install here:</p>
+            <a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer" class="external-link">
+                https://nodejs.org/en/download
+            </a>
+        </div>
+
+        <div class="step-content" data-step="3">
+            <p>You can read the tutorial and learn how to use with this command:</p>
+            <div class="code-block">
+                <span id="cmd2">fesm help</span>
+                <button class="copy-btn" onclick="copyText('cmd2', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="step-content" data-step="4">
+            <p style="font-size: 22px; font-weight: bold; color: #0e6f7c; text-align: center; margin-top: 20px;">
+                Thanks to installed FESM!
+            </p>
+        </div>
+
+        <div class="wizard-buttons">
+            <button class="btn-step btn-prev hidden" id="prevBtn" onclick="changeStep(-1)">Back</button>
+            <button class="btn-step btn-next" id="nextBtn" onclick="changeStep(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function changeStep(direction) {
+            currentStep += direction;
+
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.classList.remove('active');
+                if (parseInt(step.getAttribute('data-step')) === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            document.getElementById('stepIndicator').textContent = `Step ${currentStep} of ${totalSteps}`;
+
+            const prevBtn = document.getElementById('prevBtn');
+            if (currentStep === 1) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        function copyText(elementId, btn) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = "Copied!";
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 1500);
+            });
+        }
+    </script>
+
+</body>
+</html>

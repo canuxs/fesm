@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FESM</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="main-layout">
+
+    <nav class="sidebar">
+        <a href="assets/pages/hello.html" target="content-frame" id="logo-link">
+            <img src="assets/icons/logo.svg" alt="Logo" class="logo">
+        </a>
+
+        <a href="assets/pages/gets.html" target="content-frame" class="nav-link">Getting Started</a>
+	<a href="assets/pages/wiki.html" target="content-frame" class="nav-link">Wiki</a>
+	<a href="assets/pages/license.html" target="content-frame" class="nav-link">License</a>
+	<a href="assets/pages/issues.html" target="content-frame" class="nav-link">Issues</a>
+        <a href="assets/pages/pulls.html" target="content-frame" class="nav-link">Pull a Request</a>
+        <a href="https://github.com/canuxs/fesm" target="_blank" rel="noopener noreferrer">Repository</a>
+        <a href="https://www.npmjs.com/package/bos-fesm" target="_blank" rel="noopener noreferrer">NPM Page</a>
+
+    </nav>
+
+    <main class="content">
+        <iframe name="content-frame" src="assets/pages/hello.html"></iframe>
+    </main>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const logoLink = document.getElementById('logo-link');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        logoLink.addEventListener('click', function() {
+            navLinks.forEach(item => item.classList.remove('active'));
+        });
+    </script>
+
+</body>
+</html>

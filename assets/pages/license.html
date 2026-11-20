@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .license-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .license-loading {
+            text-align: center;
+            color: #0e6f7c;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+        .license-content {
+            background-color: #ffffff;
+            border: 1px solid #dce1e8;
+            border-radius: 8px;
+            padding: 25px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            color: #24292e;
+        }
+    </style>
+</head>
+<body class="doc-page">
+
+    <div class="license-container">
+        <h1 style="margin-bottom: 20px;">License</h1>
+        <div id="loading" class="license-loading">Lisans informations are loading...</div>
+        <pre id="licenseContent" class="license-content" style="display: none;"></pre>
+    </div>
+
+    <script>
+        const repoOwner = "canuxs";
+        const repoName = "fesm";
+
+        async function fetchLicense() {
+            const urls = [
+                `https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/LICENSE`,
+                `https://raw.githubusercontent.com/${repoOwner}/${repoName}/main/LICENSE.md`,
+                `https://raw.githubusercontent.com/${repoOwner}/${repoName}/master/LICENSE`
+            ];
+
+            let text = null;
+            for (let url of urls) {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        text = await response.text();
+                        break;
+                    }
+                } catch (e) {
+
+                }
+            }
+
+            document.getElementById('loading').style.display = 'none';
+            const contentEl = document.getElementById('licenseContent');
+
+            if (text) {
+                contentEl.textContent = text;
+                contentEl.style.display = 'block';
+            } else {
+                contentEl.textContent = "Error: 404";
+                contentEl.style.display = 'block';
+            }
+        }
+
+        fetchLicense();
+    </script>
+
+</body>
+</html>

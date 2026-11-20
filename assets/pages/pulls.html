@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pull Requests - FESM</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .gh-container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .new-pr-box {
+            background-color: #ffffff;
+            border: 1px solid #dce1e8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .new-pr-box h3 {
+            color: #0e6f7c;
+            font-size: 18px;
+        }
+        .new-pr-box p {
+            font-size: 14px;
+            color: #586069;
+        }
+        .gh-btn {
+            background-color: #0e6f7c;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            align-self: flex-start;
+            text-decoration: none;
+            text-align: center;
+        }
+        .gh-btn:hover {
+            background-color: #094c56;
+        }
+        .gh-loading {
+            text-align: center;
+            color: #0e6f7c;
+            font-size: 18px;
+            margin-top: 30px;
+        }
+        .gh-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .gh-item {
+            background-color: #ffffff;
+            border: 1px solid #dce1e8;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        .gh-item:hover {
+            border-color: #0e6f7c;
+        }
+        .gh-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0e6f7c;
+            margin-bottom: 4px;
+        }
+        .gh-info {
+            font-size: 13px;
+            color: #586069;
+        }
+        .gh-badge {
+            background-color: #6f42c1;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="doc-page">
+
+    <div class="gh-container">
+        <h1>Pull Requests</h1>
+
+        <div class="new-pr-box">
+            <h3>Create a New Pull Request</h3>
+            <p>To contribute to this project, you can open a pull request directly on GitHub.</p>
+            <a href="https://github.com/canuxs/fesm/pulls" target="_blank" rel="noopener noreferrer" class="gh-btn">Open on GitHub</a>
+        </div>
+
+        <h3 style="margin-bottom: 15px; color: #333;">Open Pull Requests</h3>
+        <div id="loading" class="gh-loading">Loading pull requests...</div>
+        <div id="ghList" class="gh-list"></div>
+    </div>
+
+    <script>
+        const repoOwner = "canuxs";
+        const repoName = "fesm";
+
+        async function fetchPulls() {
+            const url = `https://api.github.com/repos/${repoOwner}/${repoName}/pulls?state=open`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error();
+                
+                const pulls = await response.json();
+                const listEl = document.getElementById('ghList');
+                document.getElementById('loading').style.display = 'none';
+
+                if (pulls.length === 0) {
+                    listEl.innerHTML = "<p style='text-align:center; color:#586069;'>There are currently no open pull requests.</p>";
+                    return;
+                }
+
+                pulls.forEach(pr => {
+                    const date = new Date(pr.created_at).toLocaleDateString('en-US');
+                    const item = document.createElement('a');
+                    item.href = pr.html_url;
+                    item.target = "_blank";
+                    item.rel = "noopener noreferrer";
+                    item.className = "gh-item";
+                    
+                    item.innerHTML = `
+                        <div>
+                            <div class="gh-title">#${pr.number} - ${pr.title}</div>
+                            <div class="gh-info">Sender: ${pr.user.login} | Date: ${date}</div>
+                        </div>
+                        <span class="gh-badge">PR</span>
+                    `;
+                    listEl.appendChild(item);
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = "An error occurred while loading pull requests.";
+            }
+        }
+
+        fetchPulls();
+    </script>
+
+</body>
+</html>
